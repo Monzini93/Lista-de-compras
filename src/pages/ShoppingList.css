@@ -1,0 +1,26 @@
+.shopping-list-page {
+  min-height: calc(100vh - 200px);
+  padding: 2rem 1rem;
+}
+
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .shopping-list-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .page-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .shopping-list-page {
+    padding: 0.5rem;
+  }
+}
+

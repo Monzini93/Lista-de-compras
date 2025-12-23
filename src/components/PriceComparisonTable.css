@@ -1,0 +1,230 @@
+.price-comparison-table {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.price-comparison-table.empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.empty-message {
+  font-size: 1.1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.table-header h2 {
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.btn-clear {
+  padding: 0.5rem 1rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-clear:hover {
+  background: #da190b;
+  transform: translateY(-1px);
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+tbody tr.best-value {
+  background-color: #e8f5e9;
+  font-weight: 600;
+}
+
+td {
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.price {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.quantity {
+  color: #666;
+}
+
+.normalized-price {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.best-value-indicator {
+  text-align: center;
+}
+
+.badge-best {
+  background: #4caf50;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.actions {
+  text-align: center;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.btn-remove:hover {
+  background-color: #ffebee;
+}
+
+.table-info {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #e3f2fd;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.table-info p {
+  margin: 0;
+  color: #1976d2;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .price-comparison-table {
+    padding: 1rem;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .table-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .btn-clear {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    font-size: 0.85rem;
+    min-width: 700px;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .product-name {
+    min-width: 120px;
+  }
+
+  .table-info {
+    padding: 0.875rem;
+  }
+
+  .table-info p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .price-comparison-table {
+    padding: 0.75rem;
+  }
+
+  .table-header h2 {
+    font-size: 1.2rem;
+  }
+
+  table {
+    font-size: 0.8rem;
+    min-width: 650px;
+  }
+
+  th,
+  td {
+    padding: 0.625rem 0.4rem;
+  }
+
+  .badge-best {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
