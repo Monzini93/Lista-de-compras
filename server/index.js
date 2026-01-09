@@ -186,6 +186,10 @@ app.delete("/api/lista/:id", autenticar, async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server rodando em http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server rodando em http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
