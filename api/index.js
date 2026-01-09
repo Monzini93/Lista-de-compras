@@ -123,6 +123,111 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
+// Solicitar recuperação de senha
+app.post("/api/auth/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ erro: "Email obrigatório" });
+    }
+
+    const client = await pool.connect();
+    try {
+      const result = await client.query('SELECT id FROM "User" WHERE email = $1', [email]);
+      
+      // Sempre retorna sucesso para não revelar se o email existe
+      if (result.rowCount === 0) {
+        return res.json({ ok: true, mensagem: "Se o email existir, você receberá instruções para recuperar sua senha" });
+      }
+
+      // Gerar token de recuperação (expira em 1 hora)
+      const resetToken = jwt.sign(
+        { userId: result.rows[0].id, type: 'password-reset' },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      // URL de reset (em produção, isso seria enviado por email)
+      const resetUrl = `${process.env.FRONTEND_URL || 'https://compras-lista.vercel.app'}/reset-password?token=${resetToken}`;
+      
+      // TODO: Enviar email com o link de reset
+      // Por enquanto, vamos logar o token (em produção, usar serviço de email)
+      console.log(`Token de recuperação para ${email}: ${resetToken}`);
+      console.log(`URL de reset: ${resetUrl}`);
+      
+      // Em produção, você usaria um serviço como SendGrid, Resend, ou Nodemailer
+      // Exemplo com Resend:
+      // await resend.emails.send({
+      //   from: 'noreply@seudominio.com',
+      //   to: email,
+      //   subject: 'Recuperação de Senha',
+      //   html: `<p>Clique no link para redefinir sua senha: <a href="${resetUrl}">${resetUrl}</a></p>`
+      // });
+
+      return res.json({ 
+        ok: true, 
+        mensagem: "Se o email existir, você receberá instruções para recuperar sua senha",
+        // Remover em produção - apenas para desenvolvimento
+        ...(process.env.NODE_ENV === 'development' && { resetUrl })
+      });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ erro: "Erro ao processar solicitação de recuperação" });
+  }
+});
+
+// Resetar senha com token
+app.post("/api/auth/reset-password", async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ erro: "Token e senha obrigatórios" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ erro: "A senha deve ter pelo menos 6 caracteres" });
+    }
+
+    // Verificar token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.type !== 'password-reset') {
+        return res.status(400).json({ erro: "Token inválido" });
+      }
+    } catch (err) {
+      return res.status(400).json({ erro: "Token inválido ou expirado" });
+    }
+
+    const client = await pool.connect();
+    try {
+      // Verificar se o usuário existe
+      const userCheck = await client.query('SELECT id FROM "User" WHERE id = $1', [decoded.userId]);
+      if (userCheck.rowCount === 0) {
+        return res.status(404).json({ erro: "Usuário não encontrado" });
+      }
+
+      // Hash da nova senha
+      const senhaHash = await bcrypt.hash(password, 10);
+
+      // Atualizar senha
+      await client.query('UPDATE "User" SET password = $1 WHERE id = $2', [senhaHash, decoded.userId]);
+
+      return res.json({ ok: true, mensagem: "Senha redefinida com sucesso" });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ erro: "Erro ao redefinir senha" });
+  }
+});
+
 // GET listas (protegido)
 app.get("/api/lista", autenticar, async (req, res) => {
   try {

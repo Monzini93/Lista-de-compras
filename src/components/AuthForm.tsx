@@ -83,7 +83,10 @@ export function AuthForm({ mode, onSuccess }: AuthFormProps) {
 
         <div className="auth-links">
           {mode === 'login' ? (
-            <p>Não tem conta? <a href="/register">Cadastre-se</a></p>
+            <>
+              <p>Não tem conta? <a href="/register">Cadastre-se</a></p>
+              <p><a href="/forgot-password">Esqueci minha senha</a></p>
+            </>
           ) : (
             <p>Já tem conta? <a href="/login">Faça login</a></p>
           )}

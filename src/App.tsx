@@ -5,6 +5,8 @@ import { ShoppingList } from './pages/ShoppingList';
 import { PriceComparison } from './pages/PriceComparison';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword';
 import { auth } from './services/api';
 import './App.css';
 
@@ -18,6 +20,8 @@ function App() {
             {/* Rotas públicas */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             {/* Rotas protegidas */}
             <Route

@@ -106,6 +106,28 @@ export const auth = {
   },
 
   isAuthenticated: () => !!getToken(),
+
+  forgotPassword: async (email: string): Promise<{ ok: boolean; mensagem: string }> => {
+    try {
+      return await apiCall('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+    } catch (error) {
+      throw new Error(getErrorMessage(error));
+    }
+  },
+
+  resetPassword: async (token: string, password: string): Promise<{ ok: boolean; mensagem: string }> => {
+    try {
+      return await apiCall('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ token, password }),
+      });
+    } catch (error) {
+      throw new Error(getErrorMessage(error));
+    }
+  },
 };
 
 // Shopping Lists
