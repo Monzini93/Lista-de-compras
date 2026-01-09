@@ -5,3 +5,9 @@ node_modules
 *.log
 server/
 server/**/*
+server/**/*.js
+server/**/*.ts
+server/dist/
+server/**/*.js
+server/**/*.ts
+server/dist/
