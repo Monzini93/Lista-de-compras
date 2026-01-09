@@ -13,13 +13,21 @@ const crypto = require("crypto");
 // Verifica se DATABASE_URL está configurado
 if (!process.env.DATABASE_URL) {
   console.error('ERRO: DATABASE_URL não está configurado!');
+  throw new Error('DATABASE_URL não está configurado');
 }
 
 if (!process.env.JWT_SECRET) {
   console.error('ERRO: JWT_SECRET não está configurado!');
+  throw new Error('JWT_SECRET não está configurado');
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+let pool;
+try {
+  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+} catch (error) {
+  console.error('Erro ao criar pool do PostgreSQL:', error);
+  throw error;
+}
 const app = express();
 
 app.use(cors());
