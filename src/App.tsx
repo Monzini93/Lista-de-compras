@@ -1,7 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { ShoppingList } from './pages/ShoppingList';
 import { PriceComparison } from './pages/PriceComparison';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { auth } from './services/api';
 import './App.css';
 
 function App() {
@@ -11,8 +15,39 @@ function App() {
         <Navigation />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<ShoppingList />} />
-            <Route path="/comparacao" element={<PriceComparison />} />
+            {/* Rotas públicas */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Rotas protegidas */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <ShoppingList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/comparacao"
+              element={
+                <ProtectedRoute>
+                  <PriceComparison />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Redirecionar para login se não autenticado */}
+            <Route
+              path="*"
+              element={
+                auth.isAuthenticated() ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
           </Routes>
         </main>
       </div>
