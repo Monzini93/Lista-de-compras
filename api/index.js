@@ -127,17 +127,38 @@ app.post("/api/auth/login", async (req, res) => {
 app.get("/api/lista", autenticar, async (req, res) => {
   try {
     console.log('GET /api/lista - userId:', req.userId);
+    
+    if (!req.userId) {
+      console.error('userId não definido após autenticação');
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+    
     const client = await pool.connect();
     try {
-      const result = await client.query('SELECT id, title, items, createdAt FROM "ShoppingList" WHERE userId = $1 ORDER BY createdAt DESC', [req.userId]);
-      console.log('Listas encontradas:', result.rows.length);
+      console.log('Executando query com userId:', req.userId);
+      const result = await client.query(
+        'SELECT id, title, items, "createdAt" FROM "ShoppingList" WHERE "userId" = $1 ORDER BY "createdAt" DESC',
+        [req.userId]
+      );
+      console.log('Query executada com sucesso. Listas encontradas:', result.rows.length);
       return res.json(result.rows);
+    } catch (dbError) {
+      console.error('Erro na query do banco:', dbError);
+      return res.status(500).json({ 
+        erro: "Erro ao buscar listas no banco de dados", 
+        detalhes: dbError.message,
+        stack: process.env.NODE_ENV === 'development' ? dbError.stack : undefined
+      });
     } finally {
       client.release();
     }
   } catch (error) {
-    console.error('Erro ao buscar listas:', error);
-    return res.status(500).json({ erro: "Erro ao buscar listas", detalhes: error.message });
+    console.error('Erro geral ao buscar listas:', error);
+    return res.status(500).json({ 
+      erro: "Erro ao buscar listas", 
+      detalhes: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
