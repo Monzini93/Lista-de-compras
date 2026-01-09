@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3001/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = `${API_BASE.replace(/\/+$/,'')}/api`;
 
 interface AuthResponse {
   ok: boolean;
@@ -22,7 +23,7 @@ const getToken = () => localStorage.getItem('auth_token');
 const getErrorMessage = (error: any): string => {
   if (error instanceof TypeError) {
     if (error.message.includes('Failed to fetch')) {
-      return 'Erro de conexão: Servidor não está respondendo. Verifique se o backend está rodando em http://localhost:3001';
+      return `Erro de conexão: servidor não está respondendo em ${API_BASE}. Verifique a URL da API.`;
     }
     return 'Erro de rede: ' + error.message;
   }
