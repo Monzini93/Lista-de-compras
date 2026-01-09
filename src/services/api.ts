@@ -1,5 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-const API_URL = `${API_BASE.replace(/\/+$/,'')}/api`;
+// Detectar se está em produção (Vercel) ou desenvolvimento
+const isProduction = import.meta.env.PROD;
+const API_BASE = import.meta.env.VITE_API_URL || (isProduction ? '' : 'http://localhost:3001');
+const API_URL = API_BASE ? `${API_BASE.replace(/\/+$/,'')}/api` : '/api';
 
 interface AuthResponse {
   ok: boolean;
@@ -23,7 +25,8 @@ const getToken = () => localStorage.getItem('auth_token');
 const getErrorMessage = (error: any): string => {
   if (error instanceof TypeError) {
     if (error.message.includes('Failed to fetch')) {
-      return `Erro de conexão: servidor não está respondendo em ${API_BASE}. Verifique a URL da API.`;
+      const baseUrl = API_BASE || window.location.origin;
+      return `Erro de conexão: servidor não está respondendo em ${baseUrl}/api. Verifique a URL da API.`;
     }
     return 'Erro de rede: ' + error.message;
   }
