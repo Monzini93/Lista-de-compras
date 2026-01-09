@@ -166,22 +166,44 @@ app.get("/api/lista", autenticar, async (req, res) => {
 app.post("/api/lista", autenticar, async (req, res) => {
   try {
     const { title, items } = req.body;
+    console.log('POST /api/lista - userId:', req.userId, 'title:', title);
 
     if (!title) {
       return res.status(400).json({ erro: "Título obrigatório" });
     }
 
+    if (!req.userId) {
+      console.error('userId não definido após autenticação');
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+
     const client = await pool.connect();
     try {
       const id = crypto.randomUUID();
-      const result = await client.query('INSERT INTO "ShoppingList" (id, title, items, userId) VALUES ($1, $2, $3::jsonb, $4) RETURNING id, title, items, createdAt', [id, title, JSON.stringify(items || []), req.userId]);
+      console.log('Criando lista com id:', id);
+      const result = await client.query(
+        'INSERT INTO "ShoppingList" (id, title, items, "userId") VALUES ($1, $2, $3::jsonb, $4) RETURNING id, title, items, "createdAt"',
+        [id, title, JSON.stringify(items || []), req.userId]
+      );
+      console.log('Lista criada com sucesso:', result.rows[0]);
       return res.status(201).json(result.rows[0]);
+    } catch (dbError) {
+      console.error('Erro na query do banco ao criar lista:', dbError);
+      return res.status(500).json({ 
+        erro: "Erro ao criar lista no banco de dados", 
+        detalhes: dbError.message,
+        stack: process.env.NODE_ENV === 'development' ? dbError.stack : undefined
+      });
     } finally {
       client.release();
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ erro: "Erro ao criar lista" });
+    console.error('Erro geral ao criar lista:', error);
+    return res.status(500).json({ 
+      erro: "Erro ao criar lista", 
+      detalhes: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
@@ -193,12 +215,15 @@ app.put("/api/lista/:id", autenticar, async (req, res) => {
 
     const client = await pool.connect();
     try {
-      const existing = await client.query('SELECT userId, title, items FROM "ShoppingList" WHERE id = $1', [id]);
+      const existing = await client.query('SELECT "userId", title, items FROM "ShoppingList" WHERE id = $1', [id]);
       if (existing.rowCount === 0 || existing.rows[0].userId !== req.userId) {
         return res.status(404).json({ erro: "Lista não encontrada" });
       }
 
-      const updated = await client.query('UPDATE "ShoppingList" SET title = $1, items = $2::jsonb WHERE id = $3 RETURNING id, title, items, createdAt', [title ?? existing.rows[0].title, JSON.stringify(items ?? existing.rows[0].items), id]);
+      const updated = await client.query(
+        'UPDATE "ShoppingList" SET title = $1, items = $2::jsonb WHERE id = $3 RETURNING id, title, items, "createdAt"',
+        [title ?? existing.rows[0].title, JSON.stringify(items ?? existing.rows[0].items), id]
+      );
 
       return res.json(updated.rows[0]);
     } finally {
@@ -217,7 +242,7 @@ app.delete("/api/lista/:id", autenticar, async (req, res) => {
 
     const client = await pool.connect();
     try {
-      const existing = await client.query('SELECT userId FROM "ShoppingList" WHERE id = $1', [id]);  
+      const existing = await client.query('SELECT "userId" FROM "ShoppingList" WHERE id = $1', [id]);  
       if (existing.rowCount === 0 || existing.rows[0].userId !== req.userId) {
         return res.status(404).json({ erro: "Lista não encontrada" });
       }
