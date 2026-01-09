@@ -35,17 +35,23 @@ app.use(express.json());
 
 // Middleware de autenticação
 async function autenticar(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers.authorization;
+  console.log('Auth header:', authHeader ? 'Presente' : 'Ausente');
+  
+  const token = authHeader?.split(" ")[1];
 
   if (!token) {
+    console.log('Token não fornecido');
     return res.status(401).json({ erro: "Token não fornecido" });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
+    console.log('Token válido, userId:', req.userId);
     next();
   } catch (err) {
+    console.error('Erro ao verificar token:', err.message);
     return res.status(401).json({ erro: "Token inválido" });
   }
 }
@@ -120,16 +126,18 @@ app.post("/api/auth/login", async (req, res) => {
 // GET listas (protegido)
 app.get("/api/lista", autenticar, async (req, res) => {
   try {
+    console.log('GET /api/lista - userId:', req.userId);
     const client = await pool.connect();
     try {
       const result = await client.query('SELECT id, title, items, createdAt FROM "ShoppingList" WHERE userId = $1 ORDER BY createdAt DESC', [req.userId]);
+      console.log('Listas encontradas:', result.rows.length);
       return res.json(result.rows);
     } finally {
       client.release();
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ erro: "Erro ao buscar listas" });
+    console.error('Erro ao buscar listas:', error);
+    return res.status(500).json({ erro: "Erro ao buscar listas", detalhes: error.message });
   }
 });
 
