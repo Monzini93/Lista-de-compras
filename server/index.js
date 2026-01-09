@@ -41,7 +41,7 @@ app.post("/api/auth/register", async (req, res) => {
 
     const client = await pool.connect();
     try {
-      const existing = await client.query('SELECT id FROM "User" WHERE email = $1', [email]);
+      const existing = await client.query('SELECT id FROM "User" WHERE email = $1', [email]);        
       if (existing.rowCount > 0) {
         return res.status(409).json({ erro: "Email já cadastrado" });
       }
@@ -86,8 +86,8 @@ app.post("/api/auth/login", async (req, res) => {
         return res.status(401).json({ erro: "Email ou senha incorretos" });
       }
 
-      const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET, { expiresIn: "7d" });
-      return res.json({ ok: true, token });
+      const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET, { expiresIn: "7d" })
+;                                                                                                          return res.json({ ok: true, token });
     } finally {
       client.release();
     }
@@ -102,10 +102,7 @@ app.get("/api/lista", autenticar, async (req, res) => {
   try {
     const client = await pool.connect();
     try {
-      const result = await client.query(
-        'SELECT id, title, items, createdAt FROM "ShoppingList" WHERE userId = $1 ORDER BY createdAt DESC',
-        [req.userId]
-      );
+      const result = await client.query('SELECT id, title, items, createdAt FROM "ShoppingList" WHERE userId = $1 ORDER BY createdAt DESC', [req.userId]);
       return res.json(result.rows);
     } finally {
       client.release();
@@ -128,10 +125,7 @@ app.post("/api/lista", autenticar, async (req, res) => {
     const client = await pool.connect();
     try {
       const id = crypto.randomUUID();
-      const result = await client.query(
-        'INSERT INTO "ShoppingList" (id, title, items, userId) VALUES ($1, $2, $3::jsonb, $4) RETURNING id, title, items, createdAt',
-        [id, title, JSON.stringify(items || []), req.userId]
-      );
+      const result = await client.query('INSERT INTO "ShoppingList" (id, title, items, userId) VALUES ($1, $2, $3::jsonb, $4) RETURNING id, title, items, createdAt', [id, title, JSON.stringify(items || []), req.userId]);
       return res.status(201).json(result.rows[0]);
     } finally {
       client.release();
@@ -155,10 +149,7 @@ app.put("/api/lista/:id", autenticar, async (req, res) => {
         return res.status(404).json({ erro: "Lista não encontrada" });
       }
 
-      const updated = await client.query(
-        'UPDATE "ShoppingList" SET title = $1, items = $2::jsonb WHERE id = $3 RETURNING id, title, items, createdAt',
-        [title ?? existing.rows[0].title, JSON.stringify(items ?? existing.rows[0].items), id]
-      );
+      const updated = await client.query('UPDATE "ShoppingList" SET title = $1, items = $2::jsonb WHERE id = $3 RETURNING id, title, items, createdAt', [title ?? existing.rows[0].title, JSON.stringify(items ?? existing.rows[0].items), id]);
 
       return res.json(updated.rows[0]);
     } finally {
@@ -177,7 +168,7 @@ app.delete("/api/lista/:id", autenticar, async (req, res) => {
 
     const client = await pool.connect();
     try {
-      const existing = await client.query('SELECT userId FROM "ShoppingList" WHERE id = $1', [id]);
+      const existing = await client.query('SELECT userId FROM "ShoppingList" WHERE id = $1', [id]);  
       if (existing.rowCount === 0 || existing.rows[0].userId !== req.userId) {
         return res.status(404).json({ erro: "Lista não encontrada" });
       }
