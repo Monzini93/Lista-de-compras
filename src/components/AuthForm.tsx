@@ -21,21 +21,30 @@ export function AuthForm({ mode, onSuccess }: AuthFormProps) {
     setLoading(true);
 
     try {
+      if (!email.trim() || !password.trim()) {
+        throw new Error('Por favor, preencha todos os campos');
+      }
+
       if (mode === 'login') {
         await auth.login(email, password);
         navigate('/');
       } else {
+        if (password.length < 6) {
+          throw new Error('A senha deve ter pelo menos 6 caracteres');
+        }
         await auth.register(email, password);
         setEmail('');
         setPassword('');
         setError(''); 
-        alert('Cadastro realizado! Faça login para continuar.');
+        alert('✅ Cadastro realizado com sucesso! Agora faça login.');
         navigate('/login');
       }
       
       onSuccess?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro desconhecido');
+      const errorMsg = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(errorMsg);
+      console.error('Erro de autenticação:', errorMsg);
     } finally {
       setLoading(false);
     }
