@@ -129,6 +129,34 @@
   line-height: 1.5;
 }
 
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-card input {
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: #9333ea;
+  box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.1);
+}
+
+.auth-card input:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
 .auth-success {
   background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   color: #065f46;
