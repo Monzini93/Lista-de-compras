@@ -1,3 +1,1 @@
-import app from '../../server/index.js';
-
-export default app;
+module.exports = require('../server/index.js');
