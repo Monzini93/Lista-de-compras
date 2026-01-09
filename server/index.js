@@ -1,4 +1,7 @@
-require("dotenv").config();
+// Só carrega dotenv em desenvolvimento local
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
 
 const express = require("express");
 const cors = require("cors");
@@ -6,6 +9,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
 const crypto = require("crypto");
+
+// Verifica se DATABASE_URL está configurado
+if (!process.env.DATABASE_URL) {
+  console.error('ERRO: DATABASE_URL não está configurado!');
+}
+
+if (!process.env.JWT_SECRET) {
+  console.error('ERRO: JWT_SECRET não está configurado!');
+}
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const app = express();
@@ -86,8 +98,8 @@ app.post("/api/auth/login", async (req, res) => {
         return res.status(401).json({ erro: "Email ou senha incorretos" });
       }
 
-      const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET, { expiresIn: "7d" })
-;                                                                                                          return res.json({ ok: true, token });
+      const token = jwt.sign({ userId: user.id, email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+      return res.json({ ok: true, token });
     } finally {
       client.release();
     }
