@@ -65,11 +65,13 @@ export const ProductList = ({
         ))}
       </div>
 
-      {totalAmount > 0 && (
+      {items.length > 0 && (
         <div className="total-section">
           <div className="total-amount">
             <span className="total-label">💰 Total da Compra:</span>
-            <span className="total-value">{formatCurrency(totalAmount)}</span>
+            <span className="total-value">
+              {totalAmount > 0 ? formatCurrency(totalAmount) : 'R$ 0,00'}
+            </span>
           </div>
         </div>
       )}

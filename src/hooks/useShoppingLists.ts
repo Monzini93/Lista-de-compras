@@ -146,7 +146,10 @@ export const useShoppingLists = () => {
   const getTotalPrice = () => {
     if (!currentList) return 0;
     return currentList.items.reduce((sum, item) => {
-      return sum + (calculateItemTotalPrice(item) || 0);
+      if (item.price && item.price > 0) {
+        return sum + calculateItemTotalPrice(item.price, item.quantity, item.unit);
+      }
+      return sum;
     }, 0);
   };
 
