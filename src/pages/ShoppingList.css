@@ -1,6 +1,7 @@
 .shopping-list-page {
   min-height: calc(100vh - 200px);
   padding: 2rem 1rem 3rem;
+  background-color: transparent;
 }
 
 .page-container {

@@ -25,12 +25,12 @@
 
 body.theme-dark {
   --color-bg: #020617;
-  --color-surface: #020617;
-  --color-surface-alt: #0b1120;
+  --color-surface: #1e293b;
+  --color-surface-alt: #0f172a;
   --color-text: #e5e7eb;
   --color-text-muted: #9ca3af;
   --color-primary: #3b82f6;
-  --color-primary-soft: #1d4ed8;
+  --color-primary-soft: #1e3a8a;
   --color-primary-gradient: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
   --color-border-soft: #1f2937;
   --color-danger: #f97373;
@@ -48,11 +48,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(circle at top left, #e5e7eb 0, #f3f4f6 40%, #e5e7eb 100%);
   background-color: var(--color-bg);
+  background: radial-gradient(circle at top left, var(--color-bg) 0, var(--color-surface-alt) 40%, var(--color-bg) 100%);
   min-height: 100vh;
   overflow-x: hidden;
   color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+body.theme-dark {
+  background-color: var(--color-bg);
+  background: radial-gradient(circle at top left, #0f172a 0, #020617 40%, #0f172a 100%);
 }
 
 #root {
