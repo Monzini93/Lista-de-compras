@@ -1,10 +1,10 @@
 .shopping-list-page {
   min-height: calc(100vh - 200px);
-  padding: 2rem 1rem;
+  padding: 2rem 1rem 3rem;
 }
 
 .page-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -24,14 +24,14 @@
 .create-list-form input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-soft);
   border-radius: 4px;
   font-size: 1rem;
 }
 
 .create-list-form button {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary-gradient);
   color: white;
   border: none;
   border-radius: 4px;
@@ -55,15 +55,15 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .list-tab.active {
-  border-color: #667eea;
-  background: #f8f9ff;
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
 }
 
 .tab-button {
@@ -72,30 +72,30 @@
   border: none;
   cursor: pointer;
   font-weight: 500;
-  color: #666;
+  color: var(--color-text-muted);
   transition: color 0.3s;
 }
 
 .list-tab.active .tab-button {
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .tab-button:hover {
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .tab-delete {
   padding: 0.5rem 0.75rem;
   background: none;
   border: none;
-  color: #999;
+  color: #9ca3af;
   cursor: pointer;
   font-size: 1.2rem;
   transition: color 0.3s;
 }
 
 .tab-delete:hover {
-  color: #e74c3c;
+  color: var(--color-danger);
 }
 
 .list-header {
@@ -104,19 +104,19 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid rgba(148, 163, 184, 0.4);
 }
 
 .list-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 1.5rem;
 }
 
 .rename-btn {
   padding: 0.5rem 1rem;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-soft);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -124,7 +124,7 @@
 }
 
 .rename-btn:hover {
-  background: #e8e8e8;
+  background: #e5e7eb;
 }
 
 .rename-form {
@@ -136,14 +136,14 @@
 .rename-form input {
   flex: 1;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border-soft);
   border-radius: 4px;
   font-size: 1rem;
 }
 
 .rename-form button {
   padding: 0.5rem 1rem;
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -157,7 +157,7 @@
 }
 
 .rename-form button:last-child {
-  background: #ccc;
+  background: #9ca3af;
 }
 
 .loading,

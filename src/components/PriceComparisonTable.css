@@ -1,5 +1,5 @@
 .price-comparison-table {
-  background: white;
+  background: var(--color-surface);
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 
 .empty-message {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
@@ -26,13 +26,13 @@
 }
 
 .table-header h2 {
-  color: #333;
+  color: var(--color-text);
   font-size: 1.5rem;
 }
 
 .btn-clear {
   padding: 0.5rem 1rem;
-  background: #f44336;
+  background: var(--color-danger);
   color: white;
   border: none;
   border-radius: 6px;
@@ -43,7 +43,7 @@
 }
 
 .btn-clear:hover {
-  background: #da190b;
+  background: #dc2626;
   transform: translateY(-1px);
 }
 
@@ -59,7 +59,7 @@ table {
 }
 
 thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary-gradient);
   color: white;
 }
 
@@ -91,7 +91,7 @@ td {
 
 .product-name {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .price {

@@ -1,5 +1,5 @@
 .product-list {
-  background: white;
+  background: var(--color-surface);
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 
 .empty-message {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .list-header h2 {
-  color: #333;
+  color: var(--color-text);
   font-size: 1.5rem;
 }
 
@@ -38,13 +38,13 @@
 
 .pending-count {
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 0.95rem;
 }
 
 .btn-clear {
   padding: 0.5rem 1rem;
-  background: #f44336;
+  background: var(--color-danger);
   color: white;
   border: none;
   border-radius: 6px;
@@ -55,7 +55,7 @@
 }
 
 .btn-clear:hover {
-  background: #da190b;
+  background: #dc2626;
   transform: translateY(-1px);
 }
 
@@ -70,12 +70,12 @@
 }
 
 .items-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--color-surface-alt);
   border-radius: 4px;
 }
 
 .items-container::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #9ca3af;
   border-radius: 4px;
 }
 
@@ -86,7 +86,7 @@
 .total-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 3px solid #e0e0e0;
+  border-top: 1px solid var(--color-border-soft);
 }
 
 .total-amount {
@@ -94,7 +94,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary-gradient);
   border-radius: 10px;
   color: white;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
