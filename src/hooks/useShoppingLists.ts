@@ -26,12 +26,33 @@ export const useShoppingLists = () => {
       setLoading(true);
       setError(null);
       const data = await shoppingListAPI.getLists();
-      setLists(data as ShoppingListData[]);
-      if (data.length > 0 && !currentListId) {
-        setCurrentListId(data[0].id);
+      
+      // Validar que data é um array
+      if (!Array.isArray(data)) {
+        console.error('Dados inválidos recebidos da API:', data);
+        setError('Formato de dados inválido recebido do servidor');
+        setLists([]);
+        return;
+      }
+      
+      // Validar e normalizar cada lista
+      const validLists = data
+        .filter((list: any) => list && typeof list === 'object' && list.id && list.title)
+        .map((list: any) => ({
+          id: String(list.id),
+          title: String(list.title || ''),
+          items: Array.isArray(list.items) ? list.items : [],
+          createdAt: String(list.createdAt || new Date().toISOString()),
+        }));
+      
+      setLists(validLists);
+      if (validLists.length > 0 && !currentListId) {
+        setCurrentListId(validLists[0].id);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao carregar listas');
+      const errorMessage = err instanceof Error ? err.message : 'Erro ao carregar listas';
+      setError(errorMessage);
+      setLists([]);
     } finally {
       setLoading(false);
     }

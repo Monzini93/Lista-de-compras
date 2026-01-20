@@ -22,14 +22,19 @@ const getToken = () => localStorage.getItem('auth_token');
 // Mensagens de erro em português
 const getErrorMessage = (error: any): string => {
   if (error instanceof TypeError) {
-    if (error.message.includes('Failed to fetch')) {
+    const message = error.message || '';
+    if (typeof message === 'string' && message.includes('Failed to fetch')) {
       return `Erro de conexão: servidor não está respondendo. Verifique a URL da API.`;
     }
-    return 'Erro de rede: ' + error.message;
+    return 'Erro de rede: ' + String(message);
   }
   
   if (error instanceof Error) {
-    return error.message;
+    return String(error.message || 'Erro desconhecido');
+  }
+  
+  if (typeof error === 'string') {
+    return error;
   }
   
   return 'Erro desconhecido';
@@ -61,11 +66,22 @@ const apiCall = async (
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.erro || `Erro: ${response.statusText}`);
+      let errorMessage = `Erro: ${response.statusText}`;
+      try {
+        const error = await response.json();
+        errorMessage = error.erro || error.message || errorMessage;
+      } catch {
+        // Se não conseguir fazer parse do JSON, usa a mensagem padrão
+      }
+      throw new Error(errorMessage);
     }
 
-    return response.json();
+    try {
+      return await response.json();
+    } catch (parseError) {
+      // Se a resposta não for JSON válido, retorna null ou objeto vazio
+      return null;
+    }
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
