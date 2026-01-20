@@ -126,6 +126,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
+  color: var(--color-text);
   transition: background 0.3s;
 }
 
